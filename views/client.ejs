@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Client Redis</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Client Redis</h1>
+      <input id="urlConnection" type="text" class="form-control" value="redis://default:redis@localhost:6379/0">
+      <hr />
+      <div class="card">
+        <div class="card-header">
+          <h3>Set</h3>
+        </div>
+        <div class="card-body">
+          <form method="POST" action="/set">
+            <input id="urlConnectionSet" name="urlConnection" style="display: none;">
+            <label for="key">Key</label>
+            <input id="key" name="key" type="text" class="form-control" />
+            <label for="value">Value</label>
+            <input id="value" name="value" type="text" class="form-control" />
+            <label for="expire">Expire in seconds</label>
+            <input id="expire" name="expire" type="text" class="form-control" />
+            <br />
+            <button type="submit" class="btn btn-success">Set</button>
+          </form>
+          <% if (resultSet) { %>
+          <h6><%= resultSet %></h6>
+          <% } %>
+        </div>
+      </div>
+      <br />
+      <div class="card">
+        <div class="card-header">
+          <h3>Get</h3>
+        </div>
+        <div class="card-body">
+          <form action="/get" method="get">
+            <input id="urlConnectionGet" name="urlConnection" style="display: none;">
+            <label for="keyt">Key</label>
+            <input id="key" name="key" type="text" class="form-control" />
+            <br />
+            <button type="submit" class="btn btn-success">Get</button>
+          </form>
+          <br />
+          <label
+            >Result: <% if (resultGet) { %> <%= resultGet %> <% } %>
+          </label>
+        </div>
+      </div>
+      <br />
+      <div class="card">
+        <div class="card-header">
+          <h3>Flush</h3>
+        </div>
+        <div class="card-body">
+          <form action="/flush" method="post">
+            <input id="urlConnectionFlush" name="urlConnection" style="display: none;">
+            <button type="submit" class="btn btn-danger">Flush DB</button>
+          </form>
+          <% if (resultFlush) { %>
+          <h6><%= resultFlush %></h6>
+          <% } %>
+        </div>
+      </div>
+      <br />
+
+      <div class="card">
+        <div class="card-header">
+          <h3>List All Keys</h3>
+        </div>
+        <div class="card-body">
+          <form action="/keys">
+            <input id="urlConnectionKeys" name="urlConnection" style="display: none;">
+            <button type="submit" class="btn btn-success">List All</button>
+          </form>
+          <br />
+
+          <% if (resultKeys) { %>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Keys</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for (let key of resultKeys.split('|')){ %>
+              <tr>
+                <td><%= key %></td>
+              </tr>
+              <% } %>
+            </tbody>
+          </table>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script
+    src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+    crossorigin="anonymous"
+  ></script>
+  <script src="/js/bootstrap.min.js"></script>
+  <script>
+    var urlConnection = document.getElementById('urlConnection');
+
+    var urlConnectionSet = document.getElementById('urlConnectionSet');
+    var urlConnectionGet = document.getElementById('urlConnectionGet');
+    var urlConnectionFlush = document.getElementById('urlConnectionFlush');
+    var urlConnectionKeys = document.getElementById('urlConnectionKeys');
+
+    function setUrls() {
+      urlConnectionSet.value = urlConnection.value;
+      urlConnectionGet.value = urlConnection.value;
+      urlConnectionFlush.value = urlConnection.value;
+      urlConnectionKeys.value = urlConnection.value;
+    }
+
+    setUrls();
+
+    urlConnection.addEventListener('input', function() {
+      setUrls();
+    });
+    
+  </script>
+</html>
